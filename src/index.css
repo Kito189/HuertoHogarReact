@@ -1,0 +1,450 @@
+body{
+    font-family:"Montserrat", sans-serif;
+    background-color: #F7F7F7;
+    margin: 1;
+    color: #333333;
+}
+
+h1,h2,h3{
+    font-family:"Playfair Display", serif;
+  color: #8B4513; 
+}
+
+main button:hover{
+
+  background-color: #FFD700;
+  color:  #333333;
+
+}
+
+nav{
+    padding: 15px;
+    background-color: #0cb957;
+    border-radius: 14px;
+}
+
+nav ul{
+  list-style:none; 
+  margin:0 auto; 
+  padding:10px 18px;
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  gap:18px;
+  color:#F7F7F7;              
+}
+
+nav a{
+
+  color:#F7F7F7; 
+  font-weight:700; 
+  text-decoration:none;
+
+}
+
+nav img{
+
+width:32px; 
+height:32px; 
+border-radius:999px;
+
+}
+
+nav a:hover{
+    color: #FFD700;
+}
+
+/*logo y contenido que esta en el header antes del nav*/
+.logoP a {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none; 
+    color: inherit;
+}
+
+.logoP img{
+    width: 100px;
+    height: 100px;
+    gap: 20px;
+}
+
+
+/*seccion primera del inicio*/
+.ini{
+  background-color: #cb8858;
+  text-align: center;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: #333333;
+}
+
+/*seccion de mision vision en el index*/
+
+.mision-vision {
+    text-align: center;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+
+.bloque {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.bloque .texto {
+  flex: 1;
+  background: #fff588;
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bloque .imagen {
+  flex: 1;
+}
+
+.bloque .imagen img {
+  height: 250px;
+  width: 600px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+
+/*seccion de productos  y catalogos en el index*/
+
+
+.cards{
+  display:grid; 
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px; 
+  align-items:start; 
+  margin-top:18px;
+  margin-bottom: 15px;
+  padding: 35px;
+  background-color: #cb8858;
+  border-radius: 14px;
+    
+}
+
+.cards article, .card{
+  background:#cad0b8; 
+  border-radius:16px; 
+  padding:16px;
+  box-shadow: 0 25px 50px rgb(213, 180, 63);
+  transition:.15s;
+  width: 200px;
+  height: 400px;
+}
+
+.cards img{
+
+width:100%; 
+height:160px; 
+object-fit:cover; 
+border-radius:12px; 
+margin-bottom:10px; 
+
+    width: 200px;
+    height: 200px;
+    justify-content: center;
+}
+.cards h3 {
+    text-align: center;
+}
+
+.cards p{
+    text-align: center;
+    color: #333333;
+}
+
+/*seccion de noticias en la pagina de inicio*/
+#blog{
+  padding: 32px;
+  background-color: #0cb957;
+    margin: 0 auto;
+    gap: 20px;
+    display: flex;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border-radius: 14px;
+}
+
+#blog img{
+    width: 100px;
+    height: 100px;
+}
+
+
+#blog article{ 
+    background:#fff588; 
+    border-radius:14px; 
+    padding:16px; 
+    box-shadow:0 8px 20px rgba(0,0,0,.08); 
+    margin-bottom: 10px;
+}
+
+/*seccion de contacto y redes sociales*/
+#contacto {
+  background-color: #0cb957; 
+  color: #F7F7F7;
+  border-radius: 14px;
+  padding: 30px;
+  margin: 30px auto;
+  display: flex;             
+  justify-content: center; 
+  gap: 40px;               
+
+}
+
+#contacto h2 {
+  color: #FFD700;  
+  margin-bottom: 12px;
+}
+
+#contacto p {
+  margin: 6px 0;
+}
+
+#contacto a {
+  color: #FFD700;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+
+/*parte de la pagina de registro del usuario*/
+.registro{
+  
+  position: relative;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  margin:  10px auto;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgb(56, 136, 97);
+  backdrop-filter: blur(15px);
+  align-items: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding-top: 10px;
+  background: rgba(255,255,255,0.1);
+
+}
+
+.registro h2{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #8B4513;
+}
+
+.registro .inputBox input{
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 5px; 
+  position: relative;
+  border: 1px solid #ccc;
+  border-color: green;
+}
+
+.registro .inputBox #btn{
+  display: block;
+  position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1.25em;
+  font-weight: 400;
+  transition: 0.5s;
+  margin-top: 10px;
+  background-color: #2E8B57;
+  color: aliceblue;
+  margin: 10px auto;
+}
+
+.registro .inputBox #btn:hover {
+  background-color: #FFD700;
+  color:  #333333;
+}
+
+
+.registro .group{
+  display: flex;
+  justify-content: space-between;
+}
+
+.registro .group a{
+  text-decoration: none;
+  font-size: 1.00em;
+  font-weight: 200;
+  color: #2E8B57;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.registro span{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/*para que los logos de redes sociales estan abajito y redondos*/
+
+/* Estilos para los logos de redes sociales */
+.logo{
+align-items: center;
+  display: flex;
+  padding-top: 13px;
+  gap: 20px;
+
+}
+
+.logo img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  
+}
+
+
+.logo{ align-items: center;
+  display: flex;
+  padding-top: 10px;
+  gap: 20px;
+
+}
+
+.logo img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 10px;
+  
+}
+
+
+
+/*parte de la pagina de inicio de sesion*/
+
+.inicio{
+  position: relative;
+  padding: 60px;
+  background: var(--rosaOscuro);
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: auto;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgb(56, 136, 97);
+  backdrop-filter: blur(15px);
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 60px;
+  background: rgba(255,255,255,0.1); 
+
+}
+
+.inicio h2{
+position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  color: #8B4513;
+
+}
+
+
+.inicio .inputBox input{
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 5pxpx;  
+  position: relative;
+  border: 1px solid #ccc;
+  border-color: green;
+}
+
+.inicio .inputBox #btn{
+position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1.25em;
+  font-weight: 500;
+  transition: 0.5s;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #2E8B57;
+  color: aliceblue;
+
+}
+
+
+.inicio .inputBox #btn:hover {
+  background-color: #FFD700;
+  color:  #333333;
+}
+
+
+
+.inicio .group a{
+  text-decoration: none;
+  font-size: 1.00em;
+  font-weight: 200;
+  color: #2E8B57;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.inicio span{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+/*pie de pagina*/
+footer{
+  background:#cb8858; 
+  color:#F7F7F7; 
+  text-align:center;
+  padding:16px; 
+  border-radius:14px; 
+  margin:28px auto;
+  
+}
+
+button {
+  background-color:#2E8B57; 
+  color:#F7F7F7;              
+  border:none;
+  border-radius:6px;
+  padding:10px 16px;
+  cursor:pointer;
+}
+button:hover {
+  background-color:#FFD700; 
+  color:#333333;              
+}
+
+@media (max-width:600px){
+  nav ul{ gap:12px; padding:8px 14px; }
+  .cards img{ height:140px; }
+}
