@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/navbar/navbar';
 import Footer from '../../components/footer/footer';
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -10,7 +11,10 @@ const Home = () => {
         <section id="inicio" className="ini">
             <h2>¡Descubre la frescura del campo con HuertoHogar!</h2>
             <p>Conéctate con la naturaleza y lleva lo mejor del campo a tu mesa.</p>
+            <Link to="/producto">
             <button>Explorar productos</button>
+            </Link>
+
         </section>
 
         <section id="nosotros" className="mision-vision">

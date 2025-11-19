@@ -27,6 +27,8 @@ Si deseas clonar y ejecutar este proyecto en tu entorno local, sigue estos pasos
     ```bash
     npm install
     ```
+    npm install axios
+    ```
 
 3.  **Ejecutar el servidor de desarrollo:**
     ```bash
