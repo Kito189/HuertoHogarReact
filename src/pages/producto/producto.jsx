@@ -83,7 +83,7 @@ const Productos = () => {
                 backgroundColor: "#fff",
               }}
             >
-              {/* Si tu API tiene campo imagen, úsalo, si no, puedes dejarlo comentado */}
+            
               {/* {p.imagen && (
                 <img
                   src={p.imagen}

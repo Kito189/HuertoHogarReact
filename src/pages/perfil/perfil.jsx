@@ -8,12 +8,12 @@ const Perfil = () => {
   const correo = getUserEmail();
 
   const handleLogout = () => {
-    // borrar token + correo
+
     logout();
 
     alert("Sesión cerrada");
   
-    window.location.href = "/login"; // o "/" si prefieres
+    window.location.href = "/login"; 
   };
 
   if (!isLoggedIn()) {
@@ -37,7 +37,7 @@ const Perfil = () => {
           style={{
             marginTop: "30px",
             padding: "10px 30px",
-            backgroundColor: "#e74c3c",
+            backgroundColor: "#bfff94ff",
             color: "#fff",
             border: "none",
             borderRadius: "4px",
