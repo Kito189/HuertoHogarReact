@@ -22,7 +22,7 @@ const Navbar = () => {
                 <Link to="/login">
                     <img src="/fotos/carrito.png" alt="carrito" />
                 </Link>
-                <Link to="/login">
+                <Link to="/perfil">
                     <img src="/fotos/inicio.png" alt="inicio sesion" />
                 </Link>
             </ul>

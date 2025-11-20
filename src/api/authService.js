@@ -1,17 +1,20 @@
 import api from "./client";
 
-export const registrar = (nombre, correo, password) => {
-  return api.post("/auth/registro", {
-    nombre: nombre,
-    email: correo,
-    password: password
-  });
-};
 
-// LOGIN
-export const login = (correo, password) => {
-  return api.post("/auth/login", {
-    email: correo,
-    password: password
+export async function registrar(nombre, correo, password) {
+  const resp = await api.post("/auth/registro", {
+    nombre,
+    email: correo,   // el backend usa "email"
+    password,
   });
-};
+  return resp.data;
+}
+
+
+export async function login(correo, password) {
+  const resp = await api.post("/auth/login", {
+    email: correo,   // el backend usa "email"
+    password,
+  });
+  return resp.data;  
+}

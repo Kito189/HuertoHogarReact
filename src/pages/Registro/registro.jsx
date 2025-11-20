@@ -45,14 +45,11 @@ const Registro = () => {
     }
 
     try {
-      // 🔥 Llamamos al backend de verdad
-      await registrar(form.nombre, form.correo, form.password);
+    await registrar(form.nombre, form.correo, form.password);
 
-      alert(`Bienvenido/a ${form.nombre}, tu registro fue exitoso.`);
-      window.location.href = "/login";
-      
-      setForm({ nombre: '', correo: '', telefono: '', password: '', confirmar: '' });
-
+    alert(`Bienvenido/a ${form.nombre}, tu registro fue exitoso.`);
+    // redirigir a login:
+    window.location.href = "/login";
     } catch (err) {
       console.error(err);
       alert("Error al registrarte. Revisa el correo o intenta más tarde.");
