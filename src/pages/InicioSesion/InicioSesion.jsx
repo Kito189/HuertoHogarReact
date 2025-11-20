@@ -7,7 +7,6 @@ import '../../App.css';
 import { login } from '../../api/authService';
 
 const InicioSesion = () => {
-  const navigate = useNavigate();
 
   const [datos, setDatos] = useState({
     correo: '',
@@ -43,7 +42,7 @@ const InicioSesion = () => {
       localStorage.setItem("token", token);
 
       alert('Bienvenido 👋');
-      navigate('/');  
+      window.location.href = "/";  
 
     } catch (err) {
       console.error(err);

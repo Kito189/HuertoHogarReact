@@ -6,6 +6,7 @@ import Footer from '../../components/footer/footer';
 import { registrar } from '../../api/authService';
 
 const Registro = () => {
+   
   const [form, setForm] = useState({
     nombre: '',
     correo: '',
@@ -48,6 +49,7 @@ const Registro = () => {
       await registrar(form.nombre, form.correo, form.password);
 
       alert(`Bienvenido/a ${form.nombre}, tu registro fue exitoso.`);
+      window.location.href = "/login";
       
       setForm({ nombre: '', correo: '', telefono: '', password: '', confirmar: '' });
 
