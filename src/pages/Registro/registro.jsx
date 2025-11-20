@@ -1,7 +1,9 @@
+// src/pages/Registro/registro.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/navbar';
 import Footer from '../../components/footer/footer';
+import { registrar } from '../../api/authService';
 
 const Registro = () => {
   const [form, setForm] = useState({
@@ -16,10 +18,9 @@ const Registro = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validaciones originales
+
     if(!form.nombre || !form.correo || !form.telefono || !form.password || !form.confirmar) {
         alert("¡Todos los campos son obligatorios!");
         return;
@@ -42,10 +43,18 @@ const Registro = () => {
         return;
     }
 
-    alert(`Bienvenido/a ${form.nombre}, Tu registro fue exitoso.`);
-    
-    // Resetear formulario
-    setForm({ nombre: '', correo: '', telefono: '', password: '', confirmar: '' });
+    try {
+      // 🔥 Llamamos al backend de verdad
+      await registrar(form.nombre, form.correo, form.password);
+
+      alert(`Bienvenido/a ${form.nombre}, tu registro fue exitoso.`);
+      
+      setForm({ nombre: '', correo: '', telefono: '', password: '', confirmar: '' });
+
+    } catch (err) {
+      console.error(err);
+      alert("Error al registrarte. Revisa el correo o intenta más tarde.");
+    }
   };
 
   return (
