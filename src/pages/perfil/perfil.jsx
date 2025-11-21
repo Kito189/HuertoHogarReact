@@ -1,24 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import "../../App.css";
-import { logout, getUserEmail, isLoggedIn } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 const Perfil = () => {
-  const correo = getUserEmail();
+  const { usuario, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // Si no hay usuario logueado, manda a /login
+  useEffect(() => {
+    if (!usuario) {
+      navigate("/login");
+    }
+  }, [usuario, navigate]);
 
   const handleLogout = () => {
-
     logout();
-
     alert("Sesión cerrada");
-  
-    window.location.href = "/login"; 
+    navigate("/login");
   };
 
-  if (!isLoggedIn()) {
-    window.location.href = "/login";
-    return null;
+  
+  if (!usuario) {
+    return null; 
   }
 
   return (
@@ -29,7 +35,7 @@ const Perfil = () => {
         <h1 style={{ color: "#8B4513" }}>Mi Perfil</h1>
 
         <p style={{ fontSize: "18px", marginTop: "20px" }}>
-          <strong>Correo:</strong> {correo}
+          <strong>Correo:</strong> {usuario.correo}
         </p>
 
         <button

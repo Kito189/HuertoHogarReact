@@ -19,7 +19,7 @@ const Navbar = () => {
                 <li><a href="/#productos">Productos</a></li>
                 <li><a href="/#blog">Blog</a></li>
                 <li><a href="/#contacto">Contacto</a></li>
-                <Link to="/login">
+                <Link to="/carrito">
                     <img src="/fotos/carrito.png" alt="carrito" />
                 </Link>
                 <Link to="/perfil">
@@ -31,4 +31,6 @@ const Navbar = () => {
   );
 };
 
+
 export default Navbar;
+

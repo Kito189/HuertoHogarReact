@@ -5,6 +5,7 @@ import InicioSesion from './pages/InicioSesion/InicioSesion';
 import Registro from './pages/Registro/registro';
 import Producto from './pages/producto/producto';
 import Perfil from './pages/perfil/perfil';
+import Carrito from './pages/carrito/carrito';
 
 const AppRoutes = () => {
   return (
@@ -15,12 +16,13 @@ const AppRoutes = () => {
         <Route path="/registro" element={<Registro />} />
         <Route path="/producto" element={<Producto />} />
         <Route path="/perfil" element={<Perfil />} />
-        
-        {/* Rutas extra por si acaso quedaron links viejos */}
+        <Route path="/carrito" element={<Carrito />} />
+
+        {/* Ruta vieja por si alguien usa el link antiguo */}
         <Route path="/inicioSesion.html" element={<InicioSesion />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
-export default AppRoutes;
+export default AppRoutes;   

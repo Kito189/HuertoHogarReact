@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import "../../App.css";
-import { login } from "../../api/authService";
-import { loginUser } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 const InicioSesion = () => {
   const [datos, setDatos] = useState({ correo: "", contrasena: "" });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
   const handleChange = (e) => {
     setDatos({
@@ -21,35 +22,12 @@ const InicioSesion = () => {
     e.preventDefault();
     setError("");
 
-    const correoLimpio = datos.correo.trim();
-    const passLimpio = datos.contrasena.trim();
-
-    if (!correoLimpio || !passLimpio) {
-      setError("Debes ingresar correo y contraseña");
-      return;
-    }
-
     try {
-      const data = await login(correoLimpio, passLimpio);
-
-      if (!data || !data.token) {
-        console.error("Respuesta sin token:", data);
-        setError("No se pudo iniciar sesión. Intenta más tarde.");
-        return;
-      }
-
-      // guarda token + correo
-      loginUser(data.token, correoLimpio);
-
-      alert("Bienvenido 👋");
-      window.location.href = "/producto"; // o "/" si prefieres ir al home
+      await loginUser(datos);   
+      navigate("/");
     } catch (err) {
-      console.error(
-        "ERROR LOGIN:",
-        err.response?.status,
-        err.response?.data || err.message
-      );
-      setError("Correo o contraseña incorrectos");
+      console.error("Error en login:", err);
+      setError("Credenciales inválidas");
     }
   };
 

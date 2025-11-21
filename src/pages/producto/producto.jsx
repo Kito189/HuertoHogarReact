@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import { listarProductos } from "../../api/productos";
+import { useCart } from "../../context/CartContext";   
+import { useNavigate } from "react-router-dom";        
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+
+  const { addItem } = useCart();       
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cargar = async () => {
@@ -27,19 +32,27 @@ const Productos = () => {
     cargar();
   }, []);
 
-  //función para manejar el clic en "Comprar"
-  const handleComprar = (producto) => {
+  const handleComprar = (p) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
       alert("Debes iniciar sesión para comprar 🛒");
-      // si quieres mandarlo directo al login:
-      // window.location.href = "/login";
+      navigate("/login");
       return;
     }
 
-    // Aquí más adelante llamarás al microservicio de PEDIDOS / VENTAS
-    alert(`(Demo) Comprar: ${producto.nombre}`);
+    // normalizamos el producto para el carrito
+    const productoCarrito = {
+      id: p.id || p.codigo,
+      nombre: p.nombre,
+      precio: p.precio || p.precioUnitario || 0,
+      cantidad: 1,
+    };
+
+    addItem(productoCarrito);  
+    alert(`Producto agregado al carrito: ${p.nombre}`);
+    // si quieres, puedes enviar directo al carrito:
+    // navigate("/carrito");
   };
 
   return (
@@ -47,7 +60,13 @@ const Productos = () => {
       <Navbar />
 
       <div className="contenedor-productos" style={{ padding: "40px 10%" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#8B4513" }}>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            color: "#8B4513",
+          }}
+        >
           Nuestros productos
         </h2>
 
@@ -83,16 +102,9 @@ const Productos = () => {
                 backgroundColor: "#fff",
               }}
             >
-            
-              {/* {p.imagen && (
-                <img
-                  src={p.imagen}
-                  alt={p.nombre}
-                  style={{ width: "100%", borderRadius: "8px", marginBottom: "10px" }}
-                />
-              )} */}
-
-              <h3 style={{ marginBottom: "8px", color: "#4A752C" }}>{p.nombre}</h3>
+              <h3 style={{ marginBottom: "8px", color: "#4A752C" }}>
+                {p.nombre}
+              </h3>
 
               <p style={{ fontSize: "0.9rem", minHeight: "40px" }}>
                 {p.descripcion || "Producto fresco de nuestro huerto."}
@@ -103,7 +115,12 @@ const Productos = () => {
               </p>
 
               {p.stock !== undefined && (
-                <p style={{ fontSize: "0.85rem", color: p.stock > 0 ? "green" : "red" }}>
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: p.stock > 0 ? "green" : "red",
+                  }}
+                >
                   Stock: {p.stock}
                 </p>
               )}
