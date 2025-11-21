@@ -1,59 +1,50 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import "../../App.css";
-import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const Perfil = () => {
-  const { usuario, logout } = useAuth();
-  const navigate = useNavigate();
-
-  // Si no hay usuario logueado, manda a /login
-  useEffect(() => {
-    if (!usuario) {
-      navigate("/login");
-    }
-  }, [usuario, navigate]);
-
-  const handleLogout = () => {
-    logout();
-    alert("Sesión cerrada");
-    navigate("/login");
-  };
-
-  
-  if (!usuario) {
-    return null; 
-  }
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const token = localStorage.getItem("token");
 
   return (
     <>
       <Navbar />
 
-      <div style={{ textAlign: "center", marginTop: "80px" }}>
-        <h1 style={{ color: "#8B4513" }}>Mi Perfil</h1>
+      <section style={{ textAlign: "center", marginTop: "40px" }}>
+        <h2>Mi Perfil</h2>
 
-        <p style={{ fontSize: "18px", marginTop: "20px" }}>
-          <strong>Correo:</strong> {usuario.correo}
-        </p>
+        {!token || !usuario ? (
+          <>
+            <p>No hay usuario logueado.</p>
 
-        <button
-          onClick={handleLogout}
-          style={{
-            marginTop: "30px",
-            padding: "10px 30px",
-            backgroundColor: "#bfff94ff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
-        >
-          Cerrar Sesión
-        </button>
-      </div>
+            <div style={{ marginTop: "20px" }}>
+              <Link to="/login">
+                <button style={{ marginRight: "10px" }}>Iniciar Sesión</button>
+              </Link>
+
+              <Link to="/registro">
+                <button>Crear Cuenta</button>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3>Bienvenido/a, {usuario.nombre}</h3>
+            <p>Correo: {usuario.correo}</p>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("usuario");
+                window.location.href = "/login";
+              }}
+            >
+              Cerrar Sesión
+            </button>
+          </>
+        )}
+      </section>
 
       <Footer />
     </>
@@ -61,3 +52,4 @@ const Perfil = () => {
 };
 
 export default Perfil;
+

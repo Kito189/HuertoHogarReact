@@ -1,20 +1,35 @@
-import api from "./client";
+
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:8085", // Gateway
+});
 
 
-export async function registrar(nombre, correo, password) {
-  const resp = await api.post("/auth/registro", {
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  const isAuthUrl = config.url && config.url.startsWith("/auth");
+
+  if (token && !isAuthUrl) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+// LOGIN
+export const login = (correo, contrasena) => {
+  return api.post("/auth/login", { correo, contrasena });
+};
+
+// REGISTRO
+export const registrar = (nombre, correo, telefono, contrasena) => {
+  return api.post("/auth/registro", {
     nombre,
-    email: correo,   
-    password,
+    correo,
+    telefono,
+    contrasena,
   });
-  return resp.data;
-}
+};
 
-
-export async function login(correo, password) {
-  const resp = await api.post("/auth/login", {
-    email: correo,  
-    password,
-  });
-  return resp.data;  
-}
+export default api;
