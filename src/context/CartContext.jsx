@@ -1,62 +1,30 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
-const CartContext = createContext();
+const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
   const [items, setItems] = useState([]);
 
-  // Cargar carrito desde localStorage al entrar
-  useEffect(() => {
-    const stored = localStorage.getItem("carrito");
-    if (stored) {
-      try {
-        setItems(JSON.parse(stored));
-      } catch (err) {
-        console.error("Error parseando carrito:", err);
-        localStorage.removeItem("carrito");
-      }
-    }
-  }, []);
-
-  // Guardar carrito cuando cambien los items
-  useEffect(() => {
-    localStorage.setItem("carrito", JSON.stringify(items));
-  }, [items]);
-
   const addItem = (producto) => {
-    setItems((prev) => {
-      const existing = prev.find((p) => p.id === producto.id);
-      if (existing) {
-        return prev.map((p) =>
-          p.id === producto.id
-            ? { ...p, cantidad: p.cantidad + producto.cantidad }
-            : p
-        );
-      }
-      return [...prev, producto];
-    });
+    setItems((prev) => [...prev, producto]);
   };
 
   const removeItem = (id) => {
     setItems((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const clearCart = () => {
-    setItems([]);
-  };
+  const clearCart = () => setItems([]);
 
-  const total = items.reduce(
-    (acc, item) => acc + item.precio * item.cantidad,
-    0
-  );
+  const value = { items, addItem, removeItem, clearCart };
 
-  return (
-    <CartContext.Provider
-      value={{ items, addItem, removeItem, clearCart, total }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
-export const useCart = () => useContext(CartContext);
+// ESTE es el hook que debes usar en las pantallas
+export const useCart = () => {
+  const ctx = useContext(CartContext);
+  if (!ctx) {
+    throw new Error("useCart debe usarse dentro de un <CartProvider>");
+  }
+  return ctx;
+};

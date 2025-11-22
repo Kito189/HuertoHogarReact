@@ -1,28 +1,24 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/home/home";
-import InicioSesion from "./pages/InicioSesion/InicioSesion";
-import Registro from "./pages/Registro/registro";
-import Producto from "./pages/producto/producto";
-import Perfil from "./pages/perfil/perfil";
-import Carrito from "./pages/carrito/carrito";
+import Home from "./pages/home/home.jsx";
+import InicioSesion from "./pages/InicioSesion/InicioSesion.jsx";
+import Registro from "./pages/Registro/registro.jsx";
+import Producto from "./pages/producto/producto.jsx";
+import Carrito from "./pages/carrito/carrito.jsx";
+import Perfil from "./pages/perfil/perfil.jsx";
 
-const AppRoutes = () => {
+const RoutesFile = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<InicioSesion />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/producto" element={<Producto />} />
-        <Route path="/perfil" element={<Perfil />} />
-        <Route path="/carrito" element={<Carrito />} />
-
-        <Route path="/inicioSesion.html" element={<InicioSesion />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<InicioSesion />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="/producto" element={<Producto />} />
+      <Route path="/carrito" element={<Carrito />} />
+      <Route path="/perfil" element={<Perfil />} />
+    </Routes>
   );
 };
 
-export default AppRoutes;
+export default RoutesFile;

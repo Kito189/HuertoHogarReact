@@ -16,13 +16,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
-export const login = (correo, contrasena) => {
+// 👇 SOLO CAMBIA ESTA PARTE
+export const login = ({ email, password }) => {
   return api.post("/auth/login", {
-    email: correo,
-    password: contrasena,
+    email: email,
+    password: password,
   });
 };
+
+
 
 
 export const registrar = (nombre, correo, telefono, contrasena) => {
