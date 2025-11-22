@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import { login } from "../../api/authService";
 
+
 const InicioSesion = () => {
   const [datos, setDatos] = useState({ correo: "", contrasena: "" });
   const [error, setError] = useState("");

@@ -1,10 +1,8 @@
-
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8085", // Gateway
+  baseURL: "http://localhost:8085",
 });
-
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -19,16 +17,19 @@ api.interceptors.request.use((config) => {
 
 // LOGIN
 export const login = (correo, contrasena) => {
-  return api.post("/auth/login", { correo, contrasena });
+  return api.post("/auth/login", {
+    email: correo,
+    password: contrasena,
+  });
 };
 
 // REGISTRO
 export const registrar = (nombre, correo, telefono, contrasena) => {
   return api.post("/auth/registro", {
     nombre,
-    correo,
+    email: correo,
     telefono,
-    contrasena,
+    password: contrasena,
   });
 };
 

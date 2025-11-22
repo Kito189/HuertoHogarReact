@@ -1,8 +1,9 @@
-import api from "./authService";
+import axios from "axios";
 
-export const login = (correo, contrasena) => {
-  return api.post("/auth/login", { correo, contrasena });
-};
+
+const api = axios.create({
+  baseURL: "http://localhost:8085",
+});
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -16,3 +17,5 @@ api.interceptors.request.use((config) => {
 });
 
 export default api;
+
+export { api };

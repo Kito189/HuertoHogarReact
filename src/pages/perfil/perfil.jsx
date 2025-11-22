@@ -1,50 +1,67 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import { Link } from "react-router-dom";
 
 const Perfil = () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const token = localStorage.getItem("token");
+  const [usuario, setUsuario] = React.useState(null);
+
+  React.useEffect(() => {
+    const raw = localStorage.getItem("usuario");
+    if (!raw) {
+      setUsuario(null);
+      return;
+    }
+
+    try {
+      const data = JSON.parse(raw);
+      setUsuario(data);
+    } catch (e) {
+      console.error("Error al parsear usuario desde localStorage:", e);
+      setUsuario(null);
+    }
+  }, []);
 
   return (
     <>
       <Navbar />
 
-      <section style={{ textAlign: "center", marginTop: "40px" }}>
-        <h2>Mi Perfil</h2>
+      <main style={{ padding: "40px 20px", minHeight: "60vh" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Mi Perfil</h2>
 
-        {!token || !usuario ? (
-          <>
+        {!usuario ? (
+          <div style={{ textAlign: "center" }}>
             <p>No hay usuario logueado.</p>
-
-            <div style={{ marginTop: "20px" }}>
-              <Link to="/login">
-                <button style={{ marginRight: "10px" }}>Iniciar Sesión</button>
+            <p style={{ marginTop: "10px" }}>
+              <Link to="/login" style={{ marginRight: "10px", color: "green" }}>
+                Inicia sesión
               </Link>
-
-              <Link to="/registro">
-                <button>Crear Cuenta</button>
+              o{" "}
+              <Link to="/registro" style={{ color: "green" }}>
+                crea una cuenta
               </Link>
-            </div>
-          </>
+              .
+            </p>
+          </div>
         ) : (
-          <>
-            <h3>Bienvenido/a, {usuario.nombre}</h3>
-            <p>Correo: {usuario.correo}</p>
-
-            <button
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("usuario");
-                window.location.href = "/login";
-              }}
-            >
-              Cerrar Sesión
-            </button>
-          </>
+          <div
+            style={{
+              maxWidth: "500px",
+              margin: "0 auto",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+              padding: "20px",
+              background: "#fff",
+            }}
+          >
+            <p><strong>Nombre:</strong> {usuario.nombre}</p>
+            <p><strong>Correo:</strong> {usuario.email}</p>
+            {usuario.telefono && (
+              <p><strong>Teléfono:</strong> {usuario.telefono}</p>
+            )}
+          </div>
         )}
-      </section>
+      </main>
 
       <Footer />
     </>
@@ -52,4 +69,3 @@ const Perfil = () => {
 };
 
 export default Perfil;
-

@@ -1,11 +1,20 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-
-
 const Navbar = () => {
   const navigate = useNavigate();
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  
+  let usuario = null;
+  const raw = localStorage.getItem("usuario");
+
+  try {
+    if (raw) usuario = JSON.parse(raw);
+  } catch (e) {
+    console.error("Error al parsear usuario:", e);
+    usuario = null;
+  }
+
   const token = localStorage.getItem("token");
 
   const handleLogout = () => {
@@ -27,40 +36,26 @@ const Navbar = () => {
       <nav>
         <ul>
           <li><Link to="/">Inicio</Link></li>
-          {/* si esas secciones están en la misma página, mejor solo "#id" */}
           <li><a href="/#nosotros">Nosotros</a></li>
           <li><a href="/#productos">Productos</a></li>
           <li><a href="/#blog">Blog</a></li>
           <li><a href="/#contacto">Contacto</a></li>
 
           {/* Carrito */}
-          <li>
-            <Link to="/carrito">
-              <img src="/fotos/carrito.png" alt="carrito" />
-            </Link>
-          </li>
+          <Link to="/carrito">
+            <img src="/fotos/carrito.png" alt="carrito" />
+          </Link>
 
-          {/* Usuario: si hay sesión → perfil + botón salir, si no → login */}
-          <li>
-            {token && usuario ? (
-              <>
-                <Link to="/perfil">
-                  <img src="/fotos/inicio.png" alt="perfil" />
-                </Link>
-                <button
-                  type="button"
-                  className="btn-logout"
-                  onClick={handleLogout}
-                >
-                  Salir
-                </button>
-              </>
-            ) : (
-              <Link to="/login">
-                <img src="/fotos/inicio.png" alt="inicio sesión" />
-              </Link>
-            )}
-          </li>
+        
+          {token ? (
+            <Link to="/perfil">
+              <img src="/fotos/inicio.png" alt="perfil" />
+            </Link>
+          ) : (
+            <Link to="/login">
+              <img src="/fotos/inicio.png" alt="login" />
+            </Link>
+          )}
         </ul>
       </nav>
     </header>
@@ -68,3 +63,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
