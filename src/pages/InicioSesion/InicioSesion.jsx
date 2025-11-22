@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import { login } from "../../api/authService";
+import { login as apiLogin } from "../../api/authService";
+import { useAuth } from "../../auth/AuthContext";
 
 
 const InicioSesion = () => {
   const [datos, setDatos] = useState({ correo: "", contrasena: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();   
 
   const handleChange = (e) => {
     setDatos({
@@ -22,16 +24,23 @@ const InicioSesion = () => {
     setError("");
 
     try {
-      const resp = await login(
+      const resp = await apiLogin(
         datos.correo.trim(),
         datos.contrasena.trim()
       );
 
-      const { token, usuario } = resp.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("usuario", JSON.stringify(usuario));
+      const token = resp.data.token;
 
-      navigate("/perfil"); // o "/" si prefieres
+      
+      const usuario = {
+        email: datos.correo.trim(),
+        nombre: "Usuario Huerto",   
+      };
+
+      
+      login(usuario, token);
+
+      navigate("/perfil");
     } catch (err) {
       console.error("Error en login:", err);
       setError("Credenciales inválidas");
@@ -80,7 +89,8 @@ const InicioSesion = () => {
               ¿Todavía no tienes una cuenta? Crea una.
             </Link>
           </div>
-            <div className="logo">
+
+          <div className="logo">
             <img src="https://i0.wp.com/abcmoving.biz/wp-content/uploads/2017/02/google-logo.jpg?fit=1024%2C512&ssl=1" alt="google" />
             <img src="https://freepnglogo.com/images/all_img/facebook-logo.png" alt="facebook" />
             <img src="https://tse3.mm.bing.net/th/id/OIP.e62uIti__6ai-bXs6quo-wHaE9" alt="twitter" />

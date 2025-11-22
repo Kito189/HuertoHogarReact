@@ -1,5 +1,3 @@
-
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
@@ -11,11 +9,16 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const stored = localStorage.getItem("carrito");
     if (stored) {
-      setItems(JSON.parse(stored));
+      try {
+        setItems(JSON.parse(stored));
+      } catch (err) {
+        console.error("Error parseando carrito:", err);
+        localStorage.removeItem("carrito");
+      }
     }
   }, []);
 
-
+  // Guardar carrito cuando cambien los items
   useEffect(() => {
     localStorage.setItem("carrito", JSON.stringify(items));
   }, [items]);
@@ -24,14 +27,12 @@ export const CartProvider = ({ children }) => {
     setItems((prev) => {
       const existing = prev.find((p) => p.id === producto.id);
       if (existing) {
-        // si ya existe, solo sumamos cantidad
         return prev.map((p) =>
           p.id === producto.id
             ? { ...p, cantidad: p.cantidad + producto.cantidad }
             : p
         );
       }
-      
       return [...prev, producto];
     });
   };

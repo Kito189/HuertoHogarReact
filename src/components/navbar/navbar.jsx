@@ -1,26 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
-
-  
-  let usuario = null;
-  const raw = localStorage.getItem("usuario");
-
-  try {
-    if (raw) usuario = JSON.parse(raw);
-  } catch (e) {
-    console.error("Error al parsear usuario:", e);
-    usuario = null;
-  }
-
-  const token = localStorage.getItem("token");
+  const { usuario, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-    navigate("/login");
+    logout();              navigate("/login");
   };
 
   return (
@@ -41,16 +29,18 @@ const Navbar = () => {
           <li><a href="/#blog">Blog</a></li>
           <li><a href="/#contacto">Contacto</a></li>
 
-          {/* Carrito */}
+         
           <Link to="/carrito">
             <img src="/fotos/carrito.png" alt="carrito" />
           </Link>
 
-        
-          {token ? (
-            <Link to="/perfil">
-              <img src="/fotos/inicio.png" alt="perfil" />
-            </Link>
+         
+          {usuario ? (
+            <>
+              <Link to="/perfil">
+                <img src="/fotos/inicio.png" alt="perfil" />
+              </Link>
+            </>
           ) : (
             <Link to="/login">
               <img src="/fotos/inicio.png" alt="login" />
@@ -63,4 +53,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

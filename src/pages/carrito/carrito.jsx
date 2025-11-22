@@ -1,22 +1,25 @@
+
 import React from "react";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
+import { useAuth } from "../../auth/AuthContext";
+   // <-- FALTABA
 
 const Carrito = () => {
   const { items, removeItem, clearCart, total } = useCart();
   const { usuario } = useAuth();
   const navigate = useNavigate();
 
-  
   React.useEffect(() => {
     if (!usuario) {
       navigate("/login");
     }
   }, [usuario, navigate]);
 
-  if (!usuario) return null; 
+  if (!usuario) return null;
+
 
   const confirmarCompra = async () => {
     if (!usuario) {
