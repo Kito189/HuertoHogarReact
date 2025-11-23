@@ -41,18 +41,17 @@ const Productos = () => {
       return;
     }
 
-    // normalizamos el producto para el carrito
-    const productoCarrito = {
-      id: p.id || p.codigo,
-      nombre: p.nombre,
-      precio: p.precio || p.precioUnitario || 0,
-      cantidad: 1,
-    };
+  const productoCarrito = {
+    id: p.id || p.codigo,
+    nombre: p.nombre,
+    precio: Number(p.precio || p.precioUnitario || 0), 
+    cantidad: 1,
+  };
+
 
     addItem(productoCarrito);  
     alert(`Producto agregado al carrito: ${p.nombre}`);
-    // si quieres, puedes enviar directo al carrito:
-    // navigate("/carrito");
+
   };
 
   return (
@@ -65,6 +64,7 @@ const Productos = () => {
             textAlign: "center",
             marginBottom: "20px",
             color: "#8B4513",
+            
           }}
         >
           Nuestros productos
@@ -99,7 +99,7 @@ const Productos = () => {
                 borderRadius: "10px",
                 padding: "15px",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                backgroundColor: "#fff",
+                backgroundColor: "#ffc4e9ff",
               }}
             >
               <h3 style={{ marginBottom: "8px", color: "#4A752C" }}>

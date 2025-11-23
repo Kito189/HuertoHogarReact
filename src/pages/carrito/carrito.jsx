@@ -1,122 +1,100 @@
-
 import React from "react";
-import { useCart } from "../../context/CartContext";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import { useAuth } from "../../auth/AuthContext";
-   // <-- FALTABA
+import { useCart } from "../../context/CartContext";
 
 const Carrito = () => {
-  const { items, removeItem, clearCart, total } = useCart();
-  const { usuario } = useAuth();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (!usuario) {
-      navigate("/login");
-    }
-  }, [usuario, navigate]);
-
-  if (!usuario) return null;
+  const { items, removeItem, clearCart } = useCart();
 
 
-  const confirmarCompra = async () => {
-    if (!usuario) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-
-      const pedido = {
-        idUsuario: usuario.id,
-        items: items.map((item) => ({
-          idProducto: item.id,
-          cantidad: item.cantidad,
-          precioUnitario: item.precio,
-        })),
-        total: total,
-      };
-
-      const resp = await fetch("http://localhost:8085/api/pedidos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(pedido),
-      });
-
-      if (!resp.ok) {
-        console.error("Error al crear pedido");
-        alert("No se pudo registrar el pedido");
-        return;
-      }
-
-      alert("¡Pedido registrado con éxito!");
-      clearCart();
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-      alert("Error al conectar con el servidor");
-    }
-  };
+  const total = items.reduce(
+    (suma, item) => suma + item.precio * item.cantidad,
+    0
+  );
 
   return (
-    <>
-      <Navbar />
+ 
+<>
+  <Navbar />
 
-      {items.length === 0 ? (
-        <h2 style={{ textAlign: "center", marginTop: "80px", color: "#8B4513" }}>
-          Tu carrito está vacío...
-        </h2>
-      ) : (
-        <div style={{ padding: "40px 10%" }}>
-          <h1 style={{ textAlign: "center", color: "#8B4513", marginBottom: "20px" }}>
-            Carrito de compras
-          </h1>
+  <div
+    style={{
+      maxWidth: "800px",
+      margin: "0 auto",
+      textAlign: "center",
+      marginTop: "40px",
+      backgroundColor: "#caf0ffff",
+      borderRadius: "10px",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      border: "1px solid #ddd",
+      padding: "20px",
 
-          <table style={{ margin: "0 auto" }}>
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cant.</th>
-                <th>Subtotal</th>
-                <th></th>
+    }}
+  >
+    <h2 style={{ color: "#8B4513", marginBottom: "20px" }}>
+      Carrito de compras
+    </h2>
+
+    {items.length === 0 ? (
+      <p>No hay productos en el carrito.</p>
+    ) : (
+      <>
+        <table
+          style={{
+            margin: "0 auto",
+            borderCollapse: "collapse",
+            width: "100%",
+            maxWidth: "700px"
+          }}
+        >
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cant.</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={`${item.id}-${index}`}>
+                <td>{item.nombre}</td>
+                <td>${item.precio}</td>
+                <td>{item.cantidad}</td>
+                <td>${item.precio * item.cantidad}</td>
+                <td>
+                  <button onClick={() => removeItem(item.id)}>
+                    Quitar
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.nombre}</td>
-                  <td>${item.precio}</td>
-                  <td>{item.cantidad}</td>
-                  <td>${item.precio * item.cantidad}</td>
-                  <td>
-                    <button onClick={() => removeItem(item.id)}>Quitar</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
 
-          <h3 style={{ textAlign: "center", marginTop: "20px" }}>Total: ${total}</h3>
+        <p
+          style={{
+            marginTop: "20px",
+            fontWeight: "bold",
+            fontSize: "20px",
+            color: "#8B4513",
+          }}
+        >
+          Total: ${total.toLocaleString("es-CL")}
+        </p>
 
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <button onClick={confirmarCompra}>Confirmar compra</button>
-            <button style={{ marginLeft: "1rem" }} onClick={clearCart}>
-              Vaciar carrito
-            </button>
-          </div>
+        <div style={{ marginTop: "20px" }}>
+          <button style={{ marginRight: "10px" }}>Confirmar compra</button>
+          <button onClick={clearCart}>Vaciar carrito</button>
         </div>
-      )}
+      </>
+    )}
+  </div>
 
-      <Footer />
-    </>
-  );
+  <Footer />
+</>);
 };
 
 export default Carrito;
