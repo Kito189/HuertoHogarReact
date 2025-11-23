@@ -1,39 +1,18 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8085",
-});
+const API_URL = "http://localhost:8085/auth";
 
-// Agrega el token en todas las peticiones excepto /auth/*
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  const isAuthUrl = config.url && config.url.startsWith("/auth");
-
-  if (token && !isAuthUrl) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
-
-// 👇 SOLO CAMBIA ESTA PARTE
-export const login = ({ email, password }) => {
-  return api.post("/auth/login", {
-    email: email,
-    password: password,
+export const login = (email, password) => {
+  return axios.post(`${API_URL}/login`, {
+    email,
+    password
   });
 };
 
-
-
-
-export const registrar = (nombre, correo, telefono, contrasena) => {
-  return api.post("/auth/registro", {
+export const registrar = (nombre, email, password) => {
+  return axios.post(`${API_URL}/registro`, {
     nombre,
-    email: correo,
-    telefono,
-    password: contrasena,
+    email,
+    password
   });
 };
-
-export default api;

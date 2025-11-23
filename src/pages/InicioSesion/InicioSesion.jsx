@@ -5,18 +5,16 @@ import Footer from "../../components/footer/footer";
 import { login as apiLogin } from "../../api/authService";
 import { useAuth } from "../../auth/AuthContext";
 
-
 const InicioSesion = () => {
   const [datos, setDatos] = useState({ correo: "", contrasena: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();   
+
+  // ✔️ Aquí usamos iniciarSesion (NO login)
+  const { iniciarSesion } = useAuth();
 
   const handleChange = (e) => {
-    setDatos({
-      ...datos,
-      [e.target.id]: e.target.value,
-    });
+    setDatos({ ...datos, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -31,14 +29,13 @@ const InicioSesion = () => {
 
       const token = resp.data.token;
 
-      
       const usuario = {
         email: datos.correo.trim(),
-        nombre: "Usuario Huerto",   
+        rol: resp.data.rol
       };
 
-      
-      login(usuario, token);
+      // ✔️ Aquí llamamos a iniciarSesion
+      iniciarSesion(usuario, token);
 
       navigate("/perfil");
     } catch (err) {
@@ -85,15 +82,7 @@ const InicioSesion = () => {
           </div>
 
           <div className="group">
-            <Link to="/registro">
-              ¿Todavía no tienes una cuenta? Crea una.
-            </Link>
-          </div>
-
-          <div className="logo">
-            <img src="https://i0.wp.com/abcmoving.biz/wp-content/uploads/2017/02/google-logo.jpg?fit=1024%2C512&ssl=1" alt="google" />
-            <img src="https://freepnglogo.com/images/all_img/facebook-logo.png" alt="facebook" />
-            <img src="https://tse3.mm.bing.net/th/id/OIP.e62uIti__6ai-bXs6quo-wHaE9" alt="twitter" />
+            <Link to="/registro">¿Todavía no tienes una cuenta? Crea una.</Link>
           </div>
         </div>
       </form>
