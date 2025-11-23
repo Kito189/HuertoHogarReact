@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import { login as apiLogin } from "../../api/authService";
+import { login as apiLogin } from "../../api/authService"; 
 import { useAuth } from "../../auth/AuthContext";
 
 const InicioSesion = () => {
@@ -10,11 +10,14 @@ const InicioSesion = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // ✔️ Aquí usamos iniciarSesion (NO login)
-  const { iniciarSesion } = useAuth();
+
+  const { login } = useAuth();
 
   const handleChange = (e) => {
-    setDatos({ ...datos, [e.target.id]: e.target.value });
+    setDatos({
+      ...datos,
+      [e.target.id]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -22,6 +25,7 @@ const InicioSesion = () => {
     setError("");
 
     try {
+      // llamada al backend (gateway) para autenticar
       const resp = await apiLogin(
         datos.correo.trim(),
         datos.contrasena.trim()
@@ -31,11 +35,11 @@ const InicioSesion = () => {
 
       const usuario = {
         email: datos.correo.trim(),
-        rol: resp.data.rol
+        rol: resp.data.rol, // si tu backend lo manda; si no, elimínalo
       };
 
-      // ✔️ Aquí llamamos a iniciarSesion
-      iniciarSesion(usuario, token);
+      // 👇 guardamos usuario + token en el contexto
+      login(usuario, token);
 
       navigate("/perfil");
     } catch (err) {
@@ -47,6 +51,7 @@ const InicioSesion = () => {
   return (
     <>
       <Navbar />
+
       <form id="formLogin" onSubmit={handleSubmit} noValidate>
         <div className="registro">
           <h2>Inicio de Sesión</h2>
@@ -82,10 +87,13 @@ const InicioSesion = () => {
           </div>
 
           <div className="group">
-            <Link to="/registro">¿Todavía no tienes una cuenta? Crea una.</Link>
+            <Link to="/registro">
+              ¿Todavía no tienes una cuenta? Crea una.
+            </Link>
           </div>
         </div>
       </form>
+
       <Footer />
     </>
   );

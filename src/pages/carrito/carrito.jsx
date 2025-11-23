@@ -2,99 +2,138 @@ import React from "react";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Carrito = () => {
-  const { items, removeItem, clearCart } = useCart();
+  const { usuario } = useAuth();
+  const { items, total, removeItem, clearCart } = useCart();
+  const navigate = useNavigate();
 
+  const confirmarCompra = async () => {
+    if (!usuario) {
+      alert("Debes iniciar sesión para comprar");
+      navigate("/login");
+      return;
+    }
 
-  const total = items.reduce(
-    (suma, item) => suma + item.precio * item.cantidad,
-    0
-  );
+    if (items.length === 0) {
+      alert("No hay productos en el carrito");
+      return;
+    }
+
+    const pedido = {
+      emailCliente: usuario.email,
+      items: items.map((item) => ({
+        idProducto: item.id,
+        cantidad: item.cantidad,
+      })),
+    };
+
+    try {
+      const resp = await fetch("http://localhost:8085/api/pedidos/confirmar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pedido),
+      });
+
+      if (!resp.ok) {
+        console.error("Error al confirmar pedido:", await resp.text());
+        alert("No se pudo procesar el pedido");
+        return;
+      }
+
+      alert("Compra realizada con éxito...GRACIAS POR SU COMPRA!");
+      clearCart();
+    } catch (err) {
+      console.error(err);
+      alert("Error de conexión con el servidor");
+    }
+  };
 
   return (
- 
-<>
-  <Navbar />
+    <>
+      <Navbar />
 
-  <div
-    style={{
-      maxWidth: "800px",
-      margin: "0 auto",
-      textAlign: "center",
-      marginTop: "40px",
-      backgroundColor: "#caf0ffff",
-      borderRadius: "10px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-      border: "1px solid #ddd",
-      padding: "20px",
+      <div
+        style={{
+          padding: "40px 10%",
+          textAlign: "center",
+        }}
+      >
+        <h2 style={{ color: "#8B4513", marginBottom: "20px" }}>
+          Carrito de compras
+        </h2>
 
-    }}
-  >
-    <h2 style={{ color: "#8B4513", marginBottom: "20px" }}>
-      Carrito de compras
-    </h2>
+        {items.length === 0 ? (
+          <p>No hay productos en el carrito.</p>
+        ) : (
+          <div
+            style={{
+              maxWidth: "900px",
+              margin: "0 auto",
+              backgroundColor: "#e5f5ff",
+              padding: "20px",
+              borderRadius: "12px",
+            }}
+          >
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.nombre}</td>
+                    <td>${item.precio}</td>
+                    <td>{item.cantidad}</td>
+                    <td>${item.precio * item.cantidad}</td>
+                    <td>
+                      <button onClick={() => removeItem(item.id)}>Quitar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-    {items.length === 0 ? (
-      <p>No hay productos en el carrito.</p>
-    ) : (
-      <>
-        <table
-          style={{
-            margin: "0 auto",
-            borderCollapse: "collapse",
-            width: "100%",
-            maxWidth: "700px"
-          }}
-        >
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Precio</th>
-              <th>Cant.</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </thead>
+            <p
+              style={{
+                textAlign: "right",
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Total: ${total}
+            </p>
 
-          <tbody>
-            {items.map((item, index) => (
-              <tr key={`${item.id}-${index}`}>
-                <td>{item.nombre}</td>
-                <td>${item.precio}</td>
-                <td>{item.cantidad}</td>
-                <td>${item.precio * item.cantidad}</td>
-                <td>
-                  <button onClick={() => removeItem(item.id)}>
-                    Quitar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <div style={{ marginTop: "15px" }}>
+              <button
+                onClick={confirmarCompra}
+                style={{ marginRight: "10px" }}
+              >
+                Confirmar compra
+              </button>
+              <button onClick={clearCart}>Vaciar carrito</button>
+            </div>
+          </div>
+        )}
+      </div>
 
-        <p
-          style={{
-            marginTop: "20px",
-            fontWeight: "bold",
-            fontSize: "20px",
-            color: "#8B4513",
-          }}
-        >
-          Total: ${total.toLocaleString("es-CL")}
-        </p>
-
-        <div style={{ marginTop: "20px" }}>
-          <button style={{ marginRight: "10px" }}>Confirmar compra</button>
-          <button onClick={clearCart}>Vaciar carrito</button>
-        </div>
-      </>
-    )}
-  </div>
-
-  <Footer />
-</>);
+      <Footer />
+    </>
+  );
 };
 
 export default Carrito;

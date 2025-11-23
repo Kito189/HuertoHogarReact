@@ -2,13 +2,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const { usuario, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();              navigate("/login");
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -24,27 +24,37 @@ const Navbar = () => {
       <nav>
         <ul>
           <li><Link to="/">Inicio</Link></li>
-          <li><a href="/#nosotros">Nosotros</a></li>
-          <li><a href="/producto">Productos</a></li>
-          <li><a href="/#blog">Blog</a></li>
-          <li><a href="/#contacto">Contacto</a></li>
 
-         
-          <Link to="/carrito">
-            <img src="/fotos/carrito.png" alt="carrito" />
-          </Link>
+          {/* Si "Nosotros" está en la misma página de inicio */}
+          <li><a href="#nosotros">Nosotros</a></li>
 
-         
+          {/* AQUÍ está el cambio importante */}
+          <li><Link to="/producto">Productos</Link></li>
+
+          {/* Igual idea para blog/contacto si son secciones */}
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+
+          <li>
+            <Link to="/carrito">
+              <img src="/fotos/carrito.png" alt="carrito" />
+            </Link>
+          </li>
+
           {usuario ? (
             <>
-              <Link to="/perfil">
-                <img src="/fotos/inicio.png" alt="perfil" />
-              </Link>
+              <li>
+                <Link to="/perfil">
+                  <img src="/fotos/inicio.png" alt="perfil" />
+                </Link>
+              </li>
             </>
           ) : (
-            <Link to="/login">
-              <img src="/fotos/inicio.png" alt="login" />
-            </Link>
+            <li>
+              <Link to="/login">
+                <img src="/fotos/inicio.png" alt="login" />
+              </Link>
+            </li>
           )}
         </ul>
       </nav>

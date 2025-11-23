@@ -1,31 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [usuario, setUsuario] = useState(null);
-  const [token, setToken] = useState(null);
+  const [usuario, setUsuario] = useState(
+    () => JSON.parse(localStorage.getItem("usuario")) || null
+  );
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  // Cargar desde localStorage al iniciar
-  useEffect(() => {
-    const storedUser = localStorage.getItem("usuario");
-    const storedToken = localStorage.getItem("token");
-
-    if (storedUser && storedToken) {
-      setUsuario(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
-  }, []);
-
-  const iniciarSesion = (usuarioData, tokenData) => {
-    setUsuario(usuarioData);
-    setToken(tokenData);
-
-    localStorage.setItem("usuario", JSON.stringify(usuarioData));
-    localStorage.setItem("token", tokenData);
+  const login = (user, jwt) => {
+    setUsuario(user);
+    setToken(jwt);
+    localStorage.setItem("usuario", JSON.stringify(user));
+    localStorage.setItem("token", jwt);
   };
 
-  const cerrarSesion = () => {
+  const logout = () => {
     setUsuario(null);
     setToken(null);
     localStorage.removeItem("usuario");
@@ -33,10 +23,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ usuario, token, iniciarSesion, cerrarSesion }}>
+    <AuthContext.Provider value={{ usuario, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth debe usarse dentro de un <AuthProvider>");
+  }
+  return ctx;
+};

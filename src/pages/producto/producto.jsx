@@ -42,11 +42,13 @@ const Productos = () => {
     }
 
   const productoCarrito = {
-    id: p.id || p.codigo,
+    id: p.id,  
     nombre: p.nombre,
-    precio: Number(p.precio || p.precioUnitario || 0), 
+    precio: Number(p.precio || p.precioUnitario || 0),
     cantidad: 1,
   };
+
+
 
 
     addItem(productoCarrito);  
