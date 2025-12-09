@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
-import { login as apiLogin } from "../../api/authService"; 
+import { login as apiLogin } from "../../api/authService";
 import { useAuth } from "../../auth/AuthContext";
 
 const InicioSesion = () => {
   const [datos, setDatos] = useState({ correo: "", contrasena: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-
   const { login } = useAuth();
 
   const handleChange = (e) => {
@@ -25,21 +23,19 @@ const InicioSesion = () => {
     setError("");
 
     try {
-      // llamada al backend (gateway) para autenticar
       const resp = await apiLogin(
         datos.correo.trim(),
         datos.contrasena.trim()
       );
 
-      const token = resp.data.token;
+      const data = resp.data;
 
       const usuario = {
-        email: datos.correo.trim(),
-        rol: resp.data.rol, // si tu backend lo manda; si no, elimínalo
+        email: data.email,
+        rol: data.rol,
       };
 
-      // 👇 guardamos usuario + token en el contexto
-      login(usuario, token);
+      login(usuario, data.token);
 
       navigate("/perfil");
     } catch (err) {

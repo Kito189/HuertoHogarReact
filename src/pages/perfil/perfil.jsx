@@ -1,11 +1,9 @@
-// src/pages/Perfil/perfil.jsx
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import { useAuth } from "../../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-
 
 const Perfil = () => {
   const { usuario, logout } = useAuth();
@@ -16,7 +14,7 @@ const Perfil = () => {
   useEffect(() => {
     const cargarCompras = async () => {
       try {
-        if (!usuario?.email) return; 
+        if (!usuario?.email) return;
 
         const resp = await fetch(
           `http://localhost:8085/api/ventas/usuario/${usuario.email}`
@@ -28,7 +26,6 @@ const Perfil = () => {
         }
 
         const data = await resp.json();
-        console.log("Compras recibidas:", data);
         setCompras(data);
       } catch (error) {
         console.error("Error de conexión al cargar compras:", error);
@@ -41,7 +38,7 @@ const Perfil = () => {
   const handleLogout = () => {
     logout();
     clearCart();
-     navigate("/login");
+    navigate("/login");
   };
 
   return (
@@ -81,93 +78,93 @@ const Perfil = () => {
             Cerrar sesión
           </button>
 
-                <h3
-        style={{
-          marginTop: "25px",
-          color: "#8B4513",
-        }}
-      >
-        Mis Compras
-      </h3>
-
-      {compras.length === 0 ? (
-        <p>Aún no has comprado nada.</p>
-      ) : (
-        <div
-          style={{
-            marginTop: "15px",
-            backgroundColor: "#f8ff77ff",
-            borderRadius: "12px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            overflow: "hidden",
-          }}
-        >
-          <table
+          <h3
             style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontSize: "0.95rem",
+              marginTop: "25px",
+              color: "#8B4513",
             }}
           >
-            <thead>
-              <tr
+            Mis Compras
+          </h3>
+
+          {compras.length === 0 ? (
+            <p>Aún no has comprado nada.</p>
+          ) : (
+            <div
+              style={{
+                marginTop: "15px",
+                backgroundColor: "#f8ff77ff",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                overflow: "hidden",
+              }}
+            >
+              <table
                 style={{
-                  backgroundColor: "#53a166ff",
-                  color: "#444",
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  fontSize: "0.95rem",
                 }}
               >
-                <th
-                  style={{
-                    padding: "10px 16px",
-                    textAlign: "left",
-                  }}
-                >
-                  Fecha
-                </th>
-                <th
-                  style={{
-                    padding: "10px 16px",
-                    textAlign: "right",
-                  }}
-                >
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {compras.map((c, index) => (
-                <tr
-                  key={c.id || index}
-                  style={{
-                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9fbff",
-                  }}
-                >
-                  <td
+                <thead>
+                  <tr
                     style={{
-                      padding: "8px 16px",
-                      borderTop: "1px solid #eee",
-                      textAlign: "left",
+                      backgroundColor: "#53a166ff",
+                      color: "#444",
                     }}
                   >
-                    {c.fechaVenta}
-                  </td>
-                  <td
-                    style={{
-                      padding: "8px 16px",
-                      borderTop: "1px solid #eee",
-                      textAlign: "right",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    ${c.total}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
+                    <th
+                      style={{
+                        padding: "10px 16px",
+                        textAlign: "left",
+                      }}
+                    >
+                      Fecha
+                    </th>
+                    <th
+                      style={{
+                        padding: "10px 16px",
+                        textAlign: "right",
+                      }}
+                    >
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {compras.map((c, index) => (
+                    <tr
+                      key={c.id || index}
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#f9fbff",
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: "8px 16px",
+                          borderTop: "1px solid #eee",
+                          textAlign: "left",
+                        }}
+                      >
+                        {c.fechaVenta}
+                      </td>
+                      <td
+                        style={{
+                          padding: "8px 16px",
+                          borderTop: "1px solid #eee",
+                          textAlign: "right",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ${c.total}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

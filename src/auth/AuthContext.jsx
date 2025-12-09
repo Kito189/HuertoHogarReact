@@ -3,16 +3,20 @@ import React, { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [usuario, setUsuario] = useState(
-    () => JSON.parse(localStorage.getItem("usuario")) || null
-  );
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [usuario, setUsuario] = useState(() => {
+    const stored = localStorage.getItem("usuario");
+    return stored ? JSON.parse(stored) : null;
+  });
 
-  const login = (user, jwt) => {
-    setUsuario(user);
-    setToken(jwt);
-    localStorage.setItem("usuario", JSON.stringify(user));
-    localStorage.setItem("token", jwt);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || null;
+  });
+
+  const login = (usuarioData, tokenData) => {
+    setUsuario(usuarioData);
+    setToken(tokenData);
+    localStorage.setItem("usuario", JSON.stringify(usuarioData));
+    localStorage.setItem("token", tokenData);
   };
 
   const logout = () => {
@@ -29,10 +33,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth debe usarse dentro de un <AuthProvider>");
-  }
-  return ctx;
-};
+export const useAuth = () => useContext(AuthContext);

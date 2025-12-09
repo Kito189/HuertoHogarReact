@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // Cargar carrito desde localStorage (si existe)
+  
   const [items, setItems] = useState(() => {
     try {
       const stored = localStorage.getItem("carrito");
@@ -56,7 +56,7 @@ export const CartProvider = ({ children }) => {
       if (item.cantidad > 1) {
         copia[index] = { ...item, cantidad: item.cantidad - 1 };
       } else {
-        copia.splice(index, 1); // elimina la fila
+        copia.splice(index, 1); 
       }
 
       return copia;

@@ -34,8 +34,6 @@ const Registro = () => {
       );
 
       setMensaje("Cuenta creada correctamente. Ahora puedes iniciar sesión.");
-      // si quieres redirigir al login después de unos segundos:
-      // setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       console.error("Error en registro:", err);
       setError("No se pudo registrar el usuario.");
