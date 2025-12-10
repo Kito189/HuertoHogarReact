@@ -18,31 +18,36 @@ const InicioSesion = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      const resp = await apiLogin(
-        datos.correo.trim(),
-        datos.contrasena.trim()
-      );
+  try {
+    const resp = await apiLogin(
+      datos.correo.trim(),
+      datos.contrasena.trim()
+    );
 
-      const data = resp.data;
+    const token = resp.data.token;
 
-      const usuario = {
-        email: data.email,
-        rol: data.rol,
-      };
+    const usuario = {
+      email: datos.correo.trim(),
+      rol: resp.data.rol,
+    };
 
-      login(usuario, data.token);
+    login(usuario, token);
 
-      navigate("/perfil");
-    } catch (err) {
-      console.error("Error en login:", err);
-      setError("Credenciales inválidas");
+    if (usuario.rol === "ADMIN") {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/perfil", { replace: true });
     }
-  };
+  } catch (err) {
+    console.error("Error en login:", err);
+    setError("Credenciales inválidas");
+  }
+};
+
 
   return (
     <>

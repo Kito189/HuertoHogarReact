@@ -11,6 +11,12 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const rutaPerfil = !usuario
+    ? "/login"
+    : usuario.rol === "ADMIN"
+    ? "/admin"
+    : "/perfil";
+
   return (
     <header>
       <div className="logoP">
@@ -23,17 +29,21 @@ const Navbar = () => {
 
       <nav>
         <ul>
-          <li><Link to="/">Inicio</Link></li>
-
-          {/* Si "Nosotros" está en la misma página de inicio */}
-          <li><a href="#nosotros">Nosotros</a></li>
-
-          {/* AQUÍ está el cambio importante */}
-          <li><Link to="/producto">Productos</Link></li>
-
-          {/* Igual idea para blog/contacto si son secciones */}
-          <li><a href="#blog">Blog</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li>
+            <Link to="/">Inicio</Link>
+          </li>
+          <li>
+            <a href="#nosotros">Nosotros</a>
+          </li>
+          <li>
+            <Link to="/producto">Productos</Link>
+          </li>
+          <li>
+            <a href="#blog">Blog</a>
+          </li>
+          <li>
+            <a href="#contacto">Contacto</a>
+          </li>
 
           <li>
             <Link to="/carrito">
@@ -44,10 +54,14 @@ const Navbar = () => {
           {usuario ? (
             <>
               <li>
-                <Link to="/perfil">
+                <Link to={rutaPerfil}>
                   <img src="/fotos/inicio.png" alt="perfil" />
                 </Link>
               </li>
+              {/* si quieres botón de cerrar sesión visible en navbar:
+              <li>
+                <button onClick={handleLogout}>Salir</button>
+              </li> */}
             </>
           ) : (
             <li>
