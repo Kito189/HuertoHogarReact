@@ -21,10 +21,22 @@ const Admin = () => {
     stock: "",
     activo: true,
   });
+  const [erroresCampo, setErroresCampo] = useState({
+    nombre: "",
+    descripcion: "",
+    precio: "",
+    stock: "",
+  });
+  const [errorGeneral, setErrorGeneral] = useState("");
 
   const cargarProductos = async () => {
-    const data = await listarProductos();
-    setProductos(data);
+    try {
+      const data = await listarProductos();
+      setProductos(data);
+    } catch (e) {
+      console.error(e);
+      setErrorGeneral("No se pudieron cargar los productos.");
+    }
   };
 
   useEffect(() => {
@@ -36,35 +48,100 @@ const Admin = () => {
       ...prev,
       [campo]: valor,
     }));
+    setErroresCampo((prev) => ({
+      ...prev,
+      [campo]: "",
+    }));
+    setErrorGeneral("");
+  };
+
+  const validarFormulario = () => {
+    const errores = {
+      nombre: "",
+      descripcion: "",
+      precio: "",
+      stock: "",
+    };
+    let valido = true;
+
+    if (!form.nombre.trim()) {
+      errores.nombre = "El nombre es obligatorio.";
+      valido = false;
+    }
+
+    if (!form.descripcion.trim()) {
+      errores.descripcion = "La descripción es obligatoria.";
+      valido = false;
+    }
+
+    if (form.precio === "") {
+      errores.precio = "El precio es obligatorio.";
+      valido = false;
+    } else {
+      const precioNum = Number(form.precio);
+      if (Number.isNaN(precioNum) || precioNum <= 0) {
+        errores.precio = "El precio debe ser un número mayor a 0.";
+        valido = false;
+      }
+    }
+
+    if (form.stock === "") {
+      errores.stock = "El stock es obligatorio.";
+      valido = false;
+    } else {
+      const stockNum = Number(form.stock);
+      if (Number.isNaN(stockNum) || !Number.isInteger(stockNum) || stockNum < 0) {
+        errores.stock = "El stock debe ser un número entero mayor o igual a 0.";
+        valido = false;
+      }
+    }
+
+    setErroresCampo(errores);
+    return valido;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorGeneral("");
+
+    const esValido = validarFormulario();
+    if (!esValido) return;
 
     const payload = {
-      nombre: form.nombre,
-      descripcion: form.descripcion,
+      nombre: form.nombre.trim(),
+      descripcion: form.descripcion.trim(),
       precio: Number(form.precio),
       stock: Number(form.stock),
       activo: form.activo,
     };
 
-    if (form.id) {
-      await actualizarProducto(form.id, payload);
-    } else {
-      await crearProducto(payload);
+    try {
+      if (form.id) {
+        await actualizarProducto(form.id, payload);
+      } else {
+        await crearProducto(payload);
+      }
+
+      setForm({
+        id: null,
+        nombre: "",
+        descripcion: "",
+        precio: "",
+        stock: "",
+        activo: true,
+      });
+      setErroresCampo({
+        nombre: "",
+        descripcion: "",
+        precio: "",
+        stock: "",
+      });
+
+      cargarProductos();
+    } catch (e) {
+      console.error(e);
+      setErrorGeneral("No se pudo guardar el producto. Intenta nuevamente.");
     }
-
-    setForm({
-      id: null,
-      nombre: "",
-      descripcion: "",
-      precio: "",
-      stock: "",
-      activo: true,
-    });
-
-    cargarProductos();
   };
 
   const editar = (p) => {
@@ -76,11 +153,29 @@ const Admin = () => {
       stock: p.stock,
       activo: p.activo ?? true,
     });
+    setErroresCampo({
+      nombre: "",
+      descripcion: "",
+      precio: "",
+      stock: "",
+    });
+    setErrorGeneral("");
   };
 
   const eliminar = async (id) => {
-    await eliminarProducto(id);
-    cargarProductos();
+    setErrorGeneral("");
+    const confirmar = window.confirm(
+      "¿Seguro que quieres eliminar este producto?"
+    );
+    if (!confirmar) return;
+
+    try {
+      await eliminarProducto(id);
+      cargarProductos();
+    } catch (e) {
+      console.error(e);
+      setErrorGeneral("No se pudo eliminar el producto.");
+    }
   };
 
   const handleLogout = () => {
@@ -147,49 +242,108 @@ const Admin = () => {
             <strong>{usuario?.email}</strong> con rol <strong>ADMIN</strong>.
           </p>
 
+          {errorGeneral && (
+            <p style={{ color: "red", marginBottom: "15px" }}>{errorGeneral}</p>
+          )}
+
           <h3 style={{ marginBottom: "12px", color: "#444" }}>Producto</h3>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "1.2fr 2fr 0.8fr 0.8fr",
                 gap: "10px",
-                marginBottom: "10px",
+                marginBottom: "4px",
               }}
             >
-              <input
-                type="text"
-                placeholder="Nombre"
-                value={form.nombre}
-                onChange={(e) => handleChange("nombre", e.target.value)}
-                style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }}
-                required
-              />
-              <input
-                type="text"
-                placeholder="Descripción"
-                value={form.descripcion}
-                onChange={(e) => handleChange("descripcion", e.target.value)}
-                style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }}
-                required
-              />
-              <input
-                type="number"
-                placeholder="Precio"
-                value={form.precio}
-                onChange={(e) => handleChange("precio", e.target.value)}
-                style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }}
-                required
-              />
-              <input
-                type="number"
-                placeholder="Stock"
-                value={form.stock}
-                onChange={(e) => handleChange("stock", e.target.value)}
-                style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }}
-                required
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Nombre"
+                  value={form.nombre}
+                  onChange={(e) => handleChange("nombre", e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                  }}
+                  required
+                />
+                {erroresCampo.nombre && (
+                  <p style={{ color: "red", fontSize: "0.85rem" }}>
+                    {erroresCampo.nombre}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="Descripción"
+                  value={form.descripcion}
+                  onChange={(e) => handleChange("descripcion", e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                  }}
+                  required
+                />
+                {erroresCampo.descripcion && (
+                  <p style={{ color: "red", fontSize: "0.85rem" }}>
+                    {erroresCampo.descripcion}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  type="number"
+                  placeholder="Precio"
+                  value={form.precio}
+                  onChange={(e) => handleChange("precio", e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                  }}
+                  required
+                  min="0"
+                  step="0.01"
+                />
+                {erroresCampo.precio && (
+                  <p style={{ color: "red", fontSize: "0.85rem" }}>
+                    {erroresCampo.precio}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  type="number"
+                  placeholder="Stock"
+                  value={form.stock}
+                  onChange={(e) => handleChange("stock", e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                  }}
+                  required
+                  min="0"
+                  step="1"
+                />
+                {erroresCampo.stock && (
+                  <p style={{ color: "red", fontSize: "0.85rem" }}>
+                    {erroresCampo.stock}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div
@@ -198,6 +352,7 @@ const Admin = () => {
                 alignItems: "center",
                 gap: "8px",
                 marginBottom: "16px",
+                marginTop: "4px",
               }}
             >
               <input
@@ -226,7 +381,9 @@ const Admin = () => {
             </button>
           </form>
 
-          <h3 style={{ marginBottom: "10px", color: "#444" }}>Lista de productos</h3>
+          <h3 style={{ marginBottom: "10px", color: "#444" }}>
+            Lista de productos
+          </h3>
 
           <div
             style={{
