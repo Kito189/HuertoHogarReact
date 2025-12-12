@@ -186,175 +186,91 @@ const Admin = () => {
     <>
       <Navbar />
 
-      <div
-        style={{
-          padding: "40px 10%",
-          minHeight: "70vh",
-          backgroundColor: "#f5f5f5",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "950px",
-            margin: "0 auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "16px",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-            padding: "30px 40px 40px 40px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "10px",
-            }}
-          >
-            <h2
-              style={{
-                color: "#2f6022",
-                fontSize: "2rem",
-                margin: 0,
-              }}
-            >
-              Panel de Administración
-            </h2>
+      <div className="admin-page">
+        <div className="admin-panel">
+          <div className="admin-header">
+            <h2 className="admin-title">Panel de Administración</h2>
 
-            <button
-              onClick={handleLogout}
-              style={{
-                backgroundColor: "#b22222",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                padding: "8px 16px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
+            <button onClick={handleLogout} className="admin-logout-btn">
               Cerrar sesión
             </button>
           </div>
 
-          <p style={{ marginBottom: "25px" }}>
+          <p className="admin-session">
             Sesión iniciada como{" "}
             <strong>{usuario?.email}</strong> con rol <strong>ADMIN</strong>.
           </p>
 
-          {errorGeneral && (
-            <p style={{ color: "red", marginBottom: "15px" }}>{errorGeneral}</p>
-          )}
+          {errorGeneral && <p className="admin-error">{errorGeneral}</p>}
 
-          <h3 style={{ marginBottom: "12px", color: "#444" }}>Producto</h3>
+          <h3 className="admin-subtitle">Producto</h3>
 
-          <form onSubmit={handleSubmit} noValidate>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1.2fr 2fr 0.8fr 0.8fr",
-                gap: "10px",
-                marginBottom: "4px",
-              }}
-            >
-              <div>
+          <form onSubmit={handleSubmit} noValidate className="admin-form">
+            <div className="admin-form-grid">
+              <div className="admin-field">
                 <input
                   type="text"
                   placeholder="Nombre"
                   value={form.nombre}
                   onChange={(e) => handleChange("nombre", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
+                  className="admin-input"
                   required
                 />
                 {erroresCampo.nombre && (
-                  <p style={{ color: "red", fontSize: "0.85rem" }}>
-                    {erroresCampo.nombre}
-                  </p>
+                  <p className="admin-field-error">{erroresCampo.nombre}</p>
                 )}
               </div>
 
-              <div>
+              <div className="admin-field">
                 <input
                   type="text"
                   placeholder="Descripción"
                   value={form.descripcion}
                   onChange={(e) => handleChange("descripcion", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
+                  className="admin-input"
                   required
                 />
                 {erroresCampo.descripcion && (
-                  <p style={{ color: "red", fontSize: "0.85rem" }}>
+                  <p className="admin-field-error">
                     {erroresCampo.descripcion}
                   </p>
                 )}
               </div>
 
-              <div>
+              <div className="admin-field">
                 <input
                   type="number"
                   placeholder="Precio"
                   value={form.precio}
                   onChange={(e) => handleChange("precio", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
+                  className="admin-input"
                   required
                   min="0"
                   step="0.01"
                 />
                 {erroresCampo.precio && (
-                  <p style={{ color: "red", fontSize: "0.85rem" }}>
-                    {erroresCampo.precio}
-                  </p>
+                  <p className="admin-field-error">{erroresCampo.precio}</p>
                 )}
               </div>
 
-              <div>
+              <div className="admin-field">
                 <input
                   type="number"
                   placeholder="Stock"
                   value={form.stock}
                   onChange={(e) => handleChange("stock", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
+                  className="admin-input"
                   required
                   min="0"
                   step="1"
                 />
                 {erroresCampo.stock && (
-                  <p style={{ color: "red", fontSize: "0.85rem" }}>
-                    {erroresCampo.stock}
-                  </p>
+                  <p className="admin-field-error">{erroresCampo.stock}</p>
                 )}
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                marginBottom: "16px",
-                marginTop: "4px",
-              }}
-            >
+            <div className="admin-form-row">
               <input
                 id="chk-activo"
                 type="checkbox"
@@ -364,105 +280,48 @@ const Admin = () => {
               <label htmlFor="chk-activo">Activo</label>
             </div>
 
-            <button
-              type="submit"
-              style={{
-                backgroundColor: "#2e8b57",
-                color: "#fff",
-                border: "none",
-                borderRadius: "8px",
-                padding: "10px 20px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                marginBottom: "25px",
-              }}
-            >
+            <button type="submit" className="admin-submit-btn">
               {form.id ? "Actualizar producto" : "Crear producto"}
             </button>
           </form>
 
-          <h3 style={{ marginBottom: "10px", color: "#444" }}>
-            Lista de productos
-          </h3>
+          <h3 className="admin-subtitle">Lista de productos</h3>
 
-          <div
-            style={{
-              borderRadius: "10px",
-              overflow: "hidden",
-              border: "1px solid #e0e0e0",
-            }}
-          >
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: "0.95rem",
-              }}
-            >
+          <div className="admin-table-wrapper">
+            <table className="admin-table">
               <thead>
-                <tr
-                  style={{
-                    backgroundColor: "#d7efc8",
-                    textAlign: "left",
-                  }}
-                >
-                  <th style={{ padding: "8px 10px" }}>ID</th>
-                  <th style={{ padding: "8px 10px" }}>Nombre</th>
-                  <th style={{ padding: "8px 10px" }}>Descripción</th>
-                  <th style={{ padding: "8px 10px" }}>Precio</th>
-                  <th style={{ padding: "8px 10px" }}>Stock</th>
-                  <th style={{ padding: "8px 10px" }}>Activo</th>
-                  <th style={{ padding: "8px 10px" }}>Acciones</th>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Activo</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {productos.map((p, index) => (
                   <tr
                     key={p.id}
-                    style={{
-                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9",
-                    }}
+                    className={index % 2 === 0 ? "admin-row" : "admin-row alt"}
                   >
-                    <td style={{ padding: "6px 10px" }}>{p.id}</td>
-                    <td style={{ padding: "6px 10px" }}>{p.nombre}</td>
-                    <td style={{ padding: "6px 10px" }}>{p.descripcion}</td>
-                    <td style={{ padding: "6px 10px" }}>${p.precio}</td>
-                    <td style={{ padding: "6px 10px" }}>{p.stock}</td>
-                    <td style={{ padding: "6px 10px" }}>
-                      {p.activo ? "Sí" : "No"}
-                    </td>
-                    <td
-                      style={{
-                        padding: "6px 10px",
-                        display: "flex",
-                        gap: "6px",
-                      }}
-                    >
+                    <td>{p.id}</td>
+                    <td>{p.nombre}</td>
+                    <td>{p.descripcion}</td>
+                    <td>${p.precio}</td>
+                    <td>{p.stock}</td>
+                    <td>{p.activo ? "Sí" : "No"}</td>
+                    <td className="admin-actions">
                       <button
                         onClick={() => editar(p)}
-                        style={{
-                          backgroundColor: "#1e88e5",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "4px 10px",
-                          cursor: "pointer",
-                          fontSize: "0.85rem",
-                        }}
+                        className="admin-btn-edit"
                       >
                         Editar
                       </button>
                       <button
                         onClick={() => eliminar(p.id)}
-                        style={{
-                          backgroundColor: "#c62828",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "4px 10px",
-                          cursor: "pointer",
-                          fontSize: "0.85rem",
-                        }}
+                        className="admin-btn-delete"
                       >
                         Eliminar
                       </button>
@@ -471,14 +330,7 @@ const Admin = () => {
                 ))}
                 {productos.length === 0 && (
                   <tr>
-                    <td
-                      colSpan="7"
-                      style={{
-                        padding: "10px",
-                        textAlign: "center",
-                        color: "#777",
-                      }}
-                    >
+                    <td colSpan="7" className="admin-empty">
                       No hay productos registrados.
                     </td>
                   </tr>
@@ -495,3 +347,4 @@ const Admin = () => {
 };
 
 export default Admin;
+

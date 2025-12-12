@@ -58,10 +58,7 @@ const Navbar = () => {
                   <img src="/fotos/inicio.png" alt="perfil" />
                 </Link>
               </li>
-              {/* si quieres botón de cerrar sesión visible en navbar:
-              <li>
-                <button onClick={handleLogout}>Salir</button>
-              </li> */}
+
             </>
           ) : (
             <li>

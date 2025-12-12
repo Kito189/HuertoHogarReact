@@ -11,28 +11,34 @@ const Carrito = () => {
   const navigate = useNavigate();
 
   
-  const crearVenta = async () => {
-    const venta = {
-      cliente: usuario.email,                      
-      fechaVenta: new Date().toISOString().slice(0, 10),
-      total: total,
-      pedidoId: null,                              
-      activo: true,
-    };
+const crearVenta = async () => {
+  const totalCalculado = items.reduce(
+    (acc, item) => acc + Number(item.precio) * Number(item.cantidad),
+    0
+  );
 
-    console.log("Creando venta:", venta);
-
-    const respVenta = await fetch("http://localhost:8085/api/ventas", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(venta),
-    });
-
-    if (!respVenta.ok) {
-      console.error("Error al registrar venta:", await respVenta.text());
-      alert("El pedido se creó, pero hubo un problema al registrar la venta.");
-    }
+  const venta = {
+    cliente: usuario.email,
+    fechaVenta: new Date().toISOString().slice(0, 10),
+    total: Number(totalCalculado),
+    pedidoId: null,
+    activo: true,
   };
+
+  console.log("Creando venta:", venta);
+
+  const respVenta = await fetch("http://localhost:8085/api/ventas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(venta),
+  });
+
+  if (!respVenta.ok) {
+    console.error("Error al registrar venta:", await respVenta.text());
+    alert("El pedido se creó, pero hubo un problema al registrar la venta.");
+  }
+};
+
 
   const confirmarCompra = async () => {
     if (!usuario) {
